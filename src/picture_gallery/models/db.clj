@@ -1,6 +1,7 @@
 (ns picture-gallery.models.db
   (:require [clojure.java.jdbc :as sql]))
 
+
 (def db
   {:subprotocol "postgresql"
    :subname "//localhost/gallery"
@@ -8,6 +9,9 @@
    :password "admin"
    })
 
+
+(defmacro with-db [f & body]
+  `(sql/with-connection ~db (~f ~@body)))
 
 (defn create-user-table []
   (sql/with-connection db
@@ -24,4 +28,10 @@
 (defn create-user [user]
   (sql/with-connection db
     (sql/insert-record :users user)))
+
+(defn get-user [id]
+  (with-db sql/with-query-results
+       result
+         ["select * from users where id = ?" id]
+                       (first result)))
 

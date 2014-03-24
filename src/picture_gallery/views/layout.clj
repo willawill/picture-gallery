@@ -14,7 +14,10 @@
   (base
    (if-let [user (session/get :user)]
      [:p user]
-     (link-to "/register" "register"))
+     [:div(link-to "/register" "Register") [:pre]
+      (link-to "/login" "Login")])
    content))
+
+
 
 

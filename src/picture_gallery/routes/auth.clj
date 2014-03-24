@@ -46,6 +46,27 @@
 
             (submit-button {:tabindex 4}"Register"))))
 
+(defn login-page []
+  (layout/base
+   (form-to [:post "/login"]
+            (form-item :id
+                       (label "user-id" "User id")
+                       (text-field {:tabindex 1 :placehoder "User id"} "id"))
+            (form-item :pass
+                      (label "pass" "Password")
+                      (password-field {:tabindex 2 :placehoder "Password"}"pass"))
+            (submit-button {:tabindex 3} "Login"))))
+
+
+(defn handle-login [id pass]
+ (let [user (db/get-user id)]
+   (if (and user (crypt/compare pass (:pass user)))
+     (do
+       (session/put! :user id)
+       (resp/redirect "/"))
+      (resp/redirect "/login"))))
+
+
 (defn error-mapping [id ex]
   (cond
     (and (instance? org.postgresql.util.PSQLException ex)
@@ -72,5 +93,10 @@
        (registration-page))
 
   (POST "/register" [id pass pass1]
-        (handle-registration id pass pass1)))
+        (handle-registration id pass pass1))
 
+  (GET "/login" []
+       (login-page))
+
+  (POST "/login" [id pass]
+        (handle-login id pass)))

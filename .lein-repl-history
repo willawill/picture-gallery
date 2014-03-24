@@ -24,3 +24,27 @@ exit
 (use 'picture-gallery.models.db :reload)
 (create-user-table)
 (start-server)
+(use 'picture-gallery.models.db)
+(get-user "admin")
+(let [user (get-user "admin)])
+user
+)
+(let [a "5"])
+a
+(:pass (get-user "admin"))
+(use 'picture-gallery.repl)
+(start-server)
+{:pass (get-user "admin")}
+(:pass (get-user "admin"))
+(get-user "admin")
+(-> (get-user "admin") :pass)
+((get-user "admin") :pass)
+(:id (get-user "admin"))
+(get-in  (get-user "admin") [:pass])
+(get-in  (get-user "admin") [:id])
+(get-user "admin")
+(use 'picture-gallery.models.db :reload)
+(get-user "admin")
+(get-in  (get-user "admin") [:id])
+(start-server)
+exit
