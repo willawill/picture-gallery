@@ -3,3 +3,13 @@
 (start-server)
 (use 'picture-gallery.repl)
 (start-server)
+(reload 'picture-gallery.repl)
+(use 'picture-gallery.repl :reload)
+(use 'picture-gallery.models.db)
+(use 'picture-gallery.mo)
+(use 'picture-gallery.models.db)
+(use 'picture-gallery.repl :reload)
+(use 'picture-gallery.models.db)
+exit
+(use 'picture-gallery.models.db)
+(create-user-table)
