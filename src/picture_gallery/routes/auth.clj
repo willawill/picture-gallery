@@ -46,12 +46,24 @@
 
             (submit-button {:tabindex 4}"Register"))))
 
+(defn error-mapping [id ex]
+  (cond
+    (and (instance? org.postgresql.util.PSQLException ex)
+      (= 0 (.getErrorCode ex)))
+    (str "The user with id " id " already exists!")
+    :else
+    "An error has occured while processing the request"))
+
 (defn handle-registration [id pass pass1]
   (if (valid? id pass pass1)
-    (do
+    (try
+
       (db/create-user {:id id :pass (crypt/encrypt pass)})
       (session/put! :user id)
-          (resp/redirect "/"))
+      (resp/redirect "/")
+      (catch Exception ex
+        (vali/rule false [:id (error-mapping id ex)])
+        (registration-page)))
     (registration-page id)))
 
 
