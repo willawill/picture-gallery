@@ -1,0 +1,5 @@
+(start-server)
+(use 'picture-gallery.handler)
+(start-server)
+(use 'picture-gallery.repl)
+(start-server)
