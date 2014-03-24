@@ -1,6 +1,8 @@
 (ns picture-gallery.routes.auth
   (:require [compojure.core :refer :all]
             [picture-gallery.routes.home :refer :all]
+            [picture-gallery.models.db :as db]
+            [noir.util.crypt :as crypt]
             [picture-gallery.views.layout :as layout]
             [hiccup.form :refer :all]
             [noir.session :as session]
@@ -36,17 +38,19 @@
 
             (form-item :pass
             (label "pass" "Password")
-            (password-field {:tabindex "2"}"pass"))
+            (password-field {:tabindex 2}"pass"))
 
             (form-item :pass1
             (label "pass1" "Comfirmation")
-            (password-field {:tableindex "3"}"pass1"))
+            (password-field {:tabindex 3}"pass1"))
 
             (submit-button {:tabindex 4}"Register"))))
 
 (defn handle-registration [id pass pass1]
   (if (valid? id pass pass1)
-    (do   (session/put! :user id)
+    (do
+      (db/create-user {:id id :pass (crypt/encrypt pass)})
+      (session/put! :user id)
           (resp/redirect "/"))
     (registration-page id)))
 

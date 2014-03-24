@@ -14,3 +14,13 @@ exit
 (use 'picture-gallery.models.db)
 (create-user-table)
 exit
+(use 'picture-gallery.models.db)
+(drop-table users)
+(drop-table :users)
+(create-user-table)
+(use 'picture-gallery.repl)
+(start-server)
+(drop-table :users)
+(use 'picture-gallery.models.db :reload)
+(create-user-table)
+(start-server)
