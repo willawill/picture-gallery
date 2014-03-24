@@ -13,3 +13,4 @@
 exit
 (use 'picture-gallery.models.db)
 (create-user-table)
+exit
