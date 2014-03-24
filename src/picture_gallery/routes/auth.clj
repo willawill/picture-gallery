@@ -28,7 +28,7 @@
    [:br]))
 
 (defn registration-page [& [id]]
-  (layout/common
+  (layout/base
    (form-to [:post "/register"]
             (form-item :id
             (label"user-id" "User id")
