@@ -20,25 +20,29 @@
 (defn format-error [[error]]
   [:div.error error])
 
+(defn form-item [name label field]
+  (list
+   (vali/on-error name format-error)
+   label
+   field
+   [:br]))
 
 (defn registration-page [& [id]]
   (layout/common
    (form-to [:post "/register"]
-            (vali/on-error :id format-error)
-            (label "user-id" "User id")
-            (text-field "id" id)
-            [:br]
-            (vali/on-error :pass format-error)
+            (form-item :id
+            (label"user-id" "User id")
+            (text-field {:tabindex 1}"id" id))
 
+            (form-item :pass
             (label "pass" "Password")
-            (password-field "pass")
-            [:br]
-            (vali/on-error :pass1 format-error)
+            (password-field {:tabindex "2"}"pass"))
 
+            (form-item :pass1
             (label "pass1" "Comfirmation")
-            (password-field "pass1")
-            [:br]
-            (submit-button "Register"))))
+            (password-field {:tableindex "3"}"pass1"))
+
+            (submit-button {:tabindex 4}"Register"))))
 
 (defn handle-registration [id pass pass1]
   (if (valid? id pass pass1)
