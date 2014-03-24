@@ -13,7 +13,7 @@
 (defn common [& content]
   (base
    (if-let [user (session/get :user)]
-     [:p user]
+     [:p (:id user) (link-to "/logout" "Log Out")]
      [:div(link-to "/register" "Register") [:pre]
       (link-to "/login" "Login")])
    content))
