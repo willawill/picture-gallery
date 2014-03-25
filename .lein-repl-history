@@ -48,3 +48,12 @@ a
 (get-in  (get-user "admin") [:id])
 (start-server)
 exit
+(use 'picture-gallery.repl)
+(start-server)
+(use 'picture-gallery.routes.upload :reload)
+(start-server)
+(stop-server)
+(start-server)
+exit
+(use 'picture-gallery.repl)
+(start-server)

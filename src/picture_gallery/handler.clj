@@ -3,7 +3,8 @@
             [compojure.route :as route]
             [noir.util.middleware :as noir-middleware]
             [picture-gallery.routes.home :refer [home-routes]]
-            [picture-gallery.routes.auth :refer [auth-routes]]))
+            [picture-gallery.routes.auth :refer [auth-routes]]
+            [picture-gallery.routes.upload :refer [upload-routes]]))
 
 (defn init []
   (println "picture-gallery is starting"))
@@ -15,6 +16,6 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
-(def app (noir-middleware/app-handler [home-routes auth-routes app-routes]))
+(def app (noir-middleware/app-handler [home-routes auth-routes upload-routes app-routes]))
 
 
