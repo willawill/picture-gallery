@@ -13,13 +13,6 @@
 (defmacro with-db [f & body]
   `(sql/with-connection ~db (~f ~@body)))
 
-(defn create-user-table []
-  (sql/with-connection db
-   (sql/create-table
-    :users
-    [:id "varchar(32) PRIMARY KEY"]
-    [:pass "varchar(100)"]
-     )))
 
 (defn drop-table [name]
   (sql/with-connection db
@@ -35,3 +28,13 @@
          ["select * from users where id = ?" id]
                        (first result)))
 
+(defn add-image [userid filename]
+  (with-db
+    sql/transaction
+    (if (sql/with-query-results
+          result
+            ["select * from images where userid=? and filename=?" userid filename]
+            (empty? result))
+        (sql/insert-record :images {:userid userid :filename filename})
+        (throw
+           (Exception. "Duplicated")))))

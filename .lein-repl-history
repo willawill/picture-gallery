@@ -60,3 +60,18 @@ exit
 exit
 (use 'picture-gallery.repl)
 (start-server)
+File
+import java.io.File
+(java.io.File. "/foo/bar")
+(java.io.File/separator. "/foo/bar")
+(java.io.File/separator)
+exit
+(use 'picture-gallery.repl)
+(start-server)
+(use 'picture-gallery.schema)
+(use 'picture-gallery.models.schema)
+(create-image-table)
+exit
+(use 'picture-gallery.repl)
+(start-server)
+exit

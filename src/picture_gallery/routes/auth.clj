@@ -4,10 +4,12 @@
             [picture-gallery.models.db :as db]
             [noir.util.crypt :as crypt]
             [picture-gallery.views.layout :as layout]
+            [picture-gallery.routes.upload :refer [gallery-path]]
             [hiccup.form :refer :all]
             [noir.session :as session]
             [noir.response :as resp]
-            [noir.validation :as vali]))
+            [noir.validation :as vali])
+  (:import java.io.File))
 
 
 (defn valid? [id pass pass1]
@@ -18,6 +20,12 @@
 
   (vali/rule (= pass pass1 ) [:pass "Passwords must match"])
   (not (vali/errors? :id :pass :pass1)))
+
+(defn create-gallery-path []
+  (let [user-path (File. (gallery-path))]
+    (if-not (.exists user-path) (.mkdirs user-path))
+    (str (.getAbsolutePath user-path) File/separator)))
+
 
 (defn format-error [[error]]
   [:div.error error])
@@ -81,6 +89,7 @@
 
       (db/create-user {:id id :pass (crypt/encrypt pass)})
       (session/put! :user id)
+      (create-gallery-path)
       (resp/redirect "/")
       (catch Exception ex
         (vali/rule false [:id (error-mapping id ex)])
