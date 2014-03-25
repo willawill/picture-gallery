@@ -18,12 +18,15 @@
            javax.imageio.ImageIO))
 
 (def galleries "galleries")
-(defn gallery-path []
-  (str galleries File/separator (session/get :user))
+(defn gallery-path [userid]
+  (str galleries File/separator userid)
 )
 
+(defn image-uri [userid filename]
+  (str "/img/" userid "/" filename))
+
 (defn serve-file [user-id file-name]
-  (file-response (str galleries File/separator user-id File/separator file-name)))
+  (file-response (str (gallery-path user-id) File/separator file-name)))
 
 
 (defn upload-page [info]
@@ -41,13 +44,13 @@
    "Please select a file to upload"
 
      (try
-       (noir.io/upload-file (gallery-path) file)
-       (println (str "/img/" (session/get :user) "/" (url-encode filename)))
+       (let [userid (session/get :user)]
+         (noir.io/upload-file (gallery-path userid) file)
 
-       (db/add-image (session/get :user) filename)
-       [:div(link-to (str "/img/" (session/get :user) "/" filename) "View")]
-       (image
-        (str "/img/" (session/get :user) "/" filename))
+         (db/add-image userid filename)
+         [:div(link-to (image-uri userid filename) "View")]
+         (image
+          (image-uri userid filename)))
 
 
        (catch Exception ex

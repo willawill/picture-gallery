@@ -10,12 +10,21 @@
      (include-css "/css/screen.css")]
     [:body content]))
 
+(defn guest-menu []
+  (list
+   [:div (link-to "/register" "Register")]
+   [:div (link-to "/login" "Login")]))
+
+(defn user-menu []
+  (list
+   [:div (link-to "/upload" "Upload")]
+   [:div (link-to "/logout" "Logout")]))
+
 (defn common [& content]
   (base
    (if-let [user (session/get :user)]
-     [:p (:id user) (link-to "/logout" "Log Out")]
-     [:div(link-to "/register" "Register") [:pre]
-      (link-to "/login" "Login")])
+      (user-menu)
+     (guest-menu))
    content))
 
 
