@@ -3,6 +3,7 @@
 /classes
 /checkouts
 /test
+/galleries
 pom.xml
 *.jar
 *.class

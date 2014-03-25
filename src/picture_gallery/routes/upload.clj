@@ -17,6 +17,10 @@
            java.awt.geom.AffineTransform
            javax.imageio.ImageIO))
 
+(defn gallery-path []
+  "galleries"
+)
+
 (defn upload-page [info]
   (layout/common
    [:h2 "Upload a picture"]
@@ -31,10 +35,20 @@
   (upload-page
    (if (empty? filename)
    "Please select a file to upload"
-   "Success")
-   ))
+
+     (try
+       (noir.io/upload-file (gallery-path) file :create-path? true)
+       (image {:height "150px"}
+              (str "/img/" (url-encode filename)))
+       (catch Exception ex
+         (str "error uploading image" (.getException ex)))))))
+
+(defn serve-file [file-name]
+  (file-response (str (gallery-path) File/separator file-name)))
 
 (defroutes upload-routes
   (GET "/upload" [info] (upload-page info))
 
-  (POST "/upload" [file] (handle-upload file)))
+  (POST "/upload" [file] (handle-upload file))
+
+  (GET "/img/:file-name" [file-name] (serve-file file-name)))

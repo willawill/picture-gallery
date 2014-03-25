@@ -57,3 +57,6 @@ exit
 exit
 (use 'picture-gallery.repl)
 (start-server)
+exit
+(use 'picture-gallery.repl)
+(start-server)
