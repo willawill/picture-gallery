@@ -38,3 +38,10 @@
         (sql/insert-record :images {:userid userid :filename filename})
         (throw
            (Exception. "Duplicated")))))
+
+(defn get-images [userid]
+  (with-db
+    sql/with-query-results
+      results
+        ["select filename from images where userid= ?" userid]
+          (doall results)))
