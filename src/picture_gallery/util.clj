@@ -11,6 +11,6 @@
   (str "/img/" userid File/separator filename))
 
 (defn display-image [userid filename]
-  (image
+  (image {:height "150px"}
    (image-uri userid filename)))
 

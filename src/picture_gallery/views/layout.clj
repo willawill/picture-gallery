@@ -15,15 +15,16 @@
    [:div (link-to "/register" "Register")]
    [:div (link-to "/login" "Login")]))
 
-(defn user-menu []
+(defn user-menu [user]
   (list
+   [:div (link-to "/" "My gallery")]
    [:div (link-to "/upload" "Upload")]
    [:div (link-to "/logout" "Logout")]))
 
 (defn common [& content]
   (base
    (if-let [user (session/get :user)]
-      (user-menu)
+      (user-menu user)
      (guest-menu))
    content))
 
