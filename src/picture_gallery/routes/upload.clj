@@ -9,6 +9,7 @@
             [noir.io :refer [upload-file resource-path]]
             [picture-gallery.views.layout :as layout]
             [picture-gallery.models.db :as db]
+            [picture-gallery.util :refer :all]
             [clojure.java.io :as io]
             [ring.util.response :refer [file-response]] )
   (:import [java.io File FileInputStream FileOutputStream]
@@ -17,13 +18,10 @@
            java.awt.geom.AffineTransform
            javax.imageio.ImageIO))
 
-(def galleries "galleries")
 (defn gallery-path [userid]
   (str galleries File/separator userid)
 )
 
-(defn image-uri [userid filename]
-  (str "/img/" userid "/" filename))
 
 (defn serve-file [user-id file-name]
   (file-response (str (gallery-path user-id) File/separator file-name)))
@@ -46,12 +44,8 @@
      (try
        (let [userid (session/get :user)]
          (noir.io/upload-file (gallery-path userid) file)
-
          (db/add-image userid filename)
-         [:div(link-to (image-uri userid filename) "View")]
-         (image
-          (image-uri userid filename)))
-
+         (display-image userid filename))
 
        (catch Exception ex
          (str "error uploading image" ex))))))
