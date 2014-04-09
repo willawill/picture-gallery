@@ -50,10 +50,23 @@
        (catch Exception ex
          (str "error uploading image" ex))))))
 
+(defn delete-image [user-id name]
+  (try
+    (db/delete-image user-id name)
+    (io/delete-file (image-uri user-id name))
+    "OK"
+    (catch Exception ex (.getMessage ex))
+    ))
+
+(defn delete-images [names]
+  (let [userid (session/get :user)]
+    (resp/json
+     (for [name names] {:name name :status (delete-image userid name)}))))
 
 (defroutes upload-routes
   (GET "/upload" [info] (restricted (upload-page info)))
 
   (POST "/upload" [file] (restricted (handle-upload file)))
+  (POST "/delete" [names] (restricted (delete-images names )))
 
   (GET "/img/:user-id/:file-name" [user-id file-name] (serve-file user-id file-name)))

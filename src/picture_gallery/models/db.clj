@@ -45,3 +45,7 @@
       results
         ["select filename from images where userid= ?" userid]
           (doall results)))
+
+(defn delete-image [user-id filename]
+  (with-db
+    sql/delete-rows :images ["userid=? and name=?" user-id filename]))
