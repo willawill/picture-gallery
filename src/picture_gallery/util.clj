@@ -11,9 +11,16 @@
 (defn image-uri [userid filename]
   (str "/img/" userid File/separator filename))
 
+(defn get-user []
+  (session/get :user))
+
+
+(defn login? [userid]
+  (and userid (= userid (get-user))))
+
 (defn display-image [userid filename]
   [:a {:class name :href (image-uri userid name)}
     (image {:height "150px"}
      (image-uri userid filename))
-    (if (= userid (session/get :user)) (check-box filename))])
+    (if (login? userid) (check-box filename))])
 

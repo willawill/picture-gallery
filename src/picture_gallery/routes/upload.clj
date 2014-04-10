@@ -3,7 +3,6 @@
             [hiccup.form :refer :all]
             [hiccup.element :refer [image link-to]]
             [hiccup.util :refer [url-encode]]
-            [noir.session :as session]
             [noir.response :as resp]
             [noir.util.route :refer [restricted]]
             [noir.io :refer [upload-file resource-path]]
@@ -42,7 +41,7 @@
    "Please select a file to upload"
 
      (try
-       (let [userid (session/get :user)]
+       (let [userid (get-user)]
          (noir.io/upload-file (gallery-path userid) file)
          (db/add-image userid filename)
          (display-image userid filename))
@@ -59,7 +58,7 @@
     ))
 
 (defn delete-images [names]
-  (let [userid (session/get :user)]
+  (let [userid (get-user)]
     (resp/json
      (for [name names] {:name name :status (delete-image userid name)}))))
 

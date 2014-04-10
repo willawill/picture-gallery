@@ -7,7 +7,6 @@
             [picture-gallery.util :refer :all]
             [noir.util.route :refer [restricted]]
 
-            [noir.session :as session]
             [noir.response :as resp]
             [hiccup.page :refer :all]
             ))
@@ -16,7 +15,7 @@
 (defn user-gallery [user-id]
   (layout/base
     [:div (map (fn [file] (display-image user-id (:filename file))) (db/get-images user-id))
-    (if (and user-id (= user-id (session/get :user)))
+    (if (login? user-id)
       [:input#delete {:type "submit" :value "delete-images"}])]))
 
 
