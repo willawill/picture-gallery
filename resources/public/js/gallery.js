@@ -1,3 +1,7 @@
+$(document).ready(function(){
+    $("#delete").click(deleteImages);
+});
+
 function deleteimages() {
   var selected = $("input:checked");
   var selectedIds = [];
@@ -6,7 +10,7 @@ function deleteimages() {
 
     if (selectedIds.length < 1) alert ("There is nothing to delete!");
     else
-     $.post("/delete",
+     $.post(context + "/delete",
          { names: selectedIds },
            function(response) {
              var errors = $('<ul>');
