@@ -5,6 +5,8 @@
             [picture-gallery.models.db :as db]
             [picture-gallery.views.layout :as layout]
             [picture-gallery.util :refer :all]
+            [noir.util.route :refer [restricted]]
+
             [noir.session :as session]
             [noir.response :as resp]
             [hiccup.page :refer :all]
@@ -13,8 +15,10 @@
 
 (defn user-gallery [user-id]
   (layout/base
-    (map (fn [file] (display-image user-id (:filename file))) (db/get-images user-id))))
+    [:div (map (fn [file] (display-image user-id (:filename file))) (db/get-images user-id))
+    (if (and user-id (= user-id (session/get :user)))
+      [:input#delete {:type "submit" :value "delete-images"}])]))
+
 
 (defroutes gallery-routes
-  (GET "/gallery/:user-id"  [user-id]
-       (user-gallery user-id)))
+  (GET "/gallery/:user-id" [user-id] (restricted (user-gallery user-id))))

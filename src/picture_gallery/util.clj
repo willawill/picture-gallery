@@ -2,6 +2,7 @@
   (:require [hiccup.util :refer [url-encode]]
             [hiccup.element :refer [image]]
             [hiccup.form :refer [check-box]]
+            [noir.util.route :refer [restricted]]
             [noir.session :as session])
   (:import java.io.File))
 
